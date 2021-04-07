@@ -1,2 +1,2 @@
-# 2021-useful_stuf
-wda
+# 2021
+Some useful stuff for various reasons.
