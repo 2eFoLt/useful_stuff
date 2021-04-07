@@ -1,77 +1,93 @@
 #include <iostream>
+#include <sstream>
 #include <string>
-#include <cmath>
-#include <vector>
-
+#include <algorithm>
 using namespace std;
 
-class task_sheet
+string toBinary(int n)
 {
- private:
-  string descrip;
-  bool done_state = false;
-  
- public:
-  void set_descrip(string _descrip)	
-  {
-  descrip = _descrip;
-  }
-  
-  string get_descrip()
-  {
-  	return descrip;
-  }
-  
-  void check()
-  {
-  	done_state = true;
-  }
-	
-	
-};
-/* run this program using the console pauser or add your own getch, system("pause") or input loop */
-
-int main(int argc, char** argv) 
-{
-	
-	vector<task_sheet> list;
-	list.reserve(1);
-	string input = "";
-	int var, i = 0;
-	cin >> input;
-	cout << "Enter commands, master. " << endl;
-	
-	while (input != "exit")
- {
-	cin >> input;
-	if (input == "hello" or  input == "hi")
+    string r;
+    while(n!=0) 
 	{
-	 cout << "Hello, my master. What do you want? " << endl;
-	 cout << "1. Sign new task" << endl;
-	 cout << "2. Check task state" << endl;
-	 cout << "3. Change task state" << endl;
-	 cin >> var;
-	  switch(var)
-	  {
-	  	case 1:
-	  		
-	  		getline(cin, input);
-	  		list[i].set_descrip(input);
-	  		i++;
-	  		cout << list.size();
-         break;
-     
-        case 2:
-        	
-         break;
-        	
-        case 3:
-        	
-        break;
-	  }
-	  
+	r = (n%2==0 ?"0":"1")+r; 
+	n/=2;
+	}
+    return r;
+}
+
+const char* hex_char_to_bin(char c)
+{
+    switch(toupper(c))
+    {
+        case '0': return "0000";
+        case '1': return "0001";
+        case '2': return "0010";
+        case '3': return "0011";
+        case '4': return "0100";
+        case '5': return "0101";
+        case '6': return "0110";
+        case '7': return "0111";
+        case '8': return "1000";
+        case '9': return "1001";
+        case 'A': return "1010";
+        case 'B': return "1011";
+        case 'C': return "1100";
+        case 'D': return "1101";
+        case 'E': return "1110";
+        case 'F': return "1111";
     }
+}
+
+
+void clear_ipv6(string &input)
+{
+for (int i = 0; i < input.size(); i++)
+{
+	if (input[i]==':') input[i] = ' ';
+}
+}
+
+void clear_ipv4(string &input)
+{
+for (int i = 0; i < input.size(); i++)
+{
+	if (input[i]=='.') input[i] = ' ';
+}
+}
+
+int main()
+{
+	int decval;
+	stringstream buffer;
+	string input, oper, result = "";
+	getline(cin, input);
+  if (input.find('.') != string::npos)
+  {
+  	clear_ipv4(input);
+  	buffer.str(input);
+ 	while (buffer >> oper)
+ 	{
+ 	 for (int i = 0; i < oper.size(); i++)
+	  {
+	  decval = stoi(oper);
+	  result += toBinary(decval);	
+	  result += ' ';
+	  }	
+	 }	
+  }
+    else
+ {
+    clear_ipv6(input);	
+    buffer.str(input);
+ 	while (buffer >> oper)
+ 	{
+ 	 for (int i = 0; i < oper.size(); i++)
+	  {
+	  result += hex_char_to_bin(oper[i]);	
+	  }	
+	 }	
  }
-    cout << "Goodbye, master..." << endl;
+	cout << result << endl;
+	system("pause");
 	return 0;
 }
